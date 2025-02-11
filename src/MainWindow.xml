@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<interface>
+	<requires lib="gtk" version="4.12"/>
+	<requires lib="libadwaita" version="1.0"/>
+	<object class="AdwWindow" id="window">
+		<property name="title">NearShare</property>
+		<property name="default-height">320</property>
+		<property name="default-width">512</property>
+		<property name="receives-default">True</property>
+		<property name="content">
+			<object class="AdwToolbarView">
+				<child type="top">
+					<object class="AdwHeaderBar">
+						<property name="title-widget">
+							<object class="AdwViewSwitcher">
+								<property name="stack">stack</property>
+								<property name="policy">wide</property>
+							</object>
+						</property>
+					</object>
+				</child>
+				<property name="content">
+					<object class="GtkBox">
+						<property name="orientation">vertical</property>
+						<child>
+							<object class="AdwBanner">
+								<property name="revealed">true</property>
+								<property name="title" translatable="yes">This software is in preview</property>
+							</object>
+						</child>
+						<child>
+							<object class="AdwViewStack" id="stack">
+								<property name="valign">fill</property>
+								<property name="vexpand">true</property>
+								<child>
+									<object class="AdwViewStackPage">
+										<property name="name">home</property>
+										<property name="title">Welcome</property>
+										<property name="icon-name">user-home-symbolic</property>
+										<property name="child">
+											<object class="AdwStatusPage">
+												<property name="title">Welcome!</property>
+											</object>
+										</property>
+									</object>
+								</child>
+								<child>
+									<object class="AdwViewStackPage">
+										<property name="name">send</property>
+										<property name="title">Send</property>
+										<property name="icon-name">go-up-symbolic</property>
+										<property name="child">
+											<object class="AdwClamp">
+												<child>
+													<object class="AdwPreferencesPage">
+														<child>
+															<object class="AdwPreferencesGroup">
+																<property name="title">Select object to share</property>
+																<child>
+																	<object class="AdwActionRow" id="shareFileAction">
+																		<property name="title">File</property>
+																		<property name="subtitle">Pick a file to share</property>
+																		<property name="icon-name">document-open-symbolic</property>
+																		<property name="activatable-widget">
+																			<object class="GtkButton" />
+																		</property>
+																	</object>
+																</child>
+																<child>
+																	<object class="AdwActionRow" id="shareClipboardAction">
+																		<property name="title">Clipboard</property>
+																		<property name="subtitle">Share the current content of your clipboard</property>
+																		<property name="icon-name">edit-paste-symbolic</property>
+																		<property name="activatable-widget">
+																			<object class="GtkButton" />
+																		</property>
+																	</object>
+																</child>
+																<child>
+																	<object class="AdwActionRow" id="shareTextAction">
+																		<property name="title">Text</property>
+																		<property name="subtitle">Share plain text entered via dialog</property>
+																		<property name="icon-name">text-x-generic</property>
+																		<property name="activatable-widget">
+																			<object class="GtkButton" />
+																		</property>
+																	</object>
+																</child>
+															</object>
+														</child>
+													</object>
+												</child>
+											</object>
+										</property>
+									</object>
+								</child>
+								<child>
+									<object class="AdwViewStackPage">
+										<property name="name">receive</property>
+										<property name="title">Receive</property>
+										<property name="icon-name">go-down-symbolic</property>
+										<property name="child">
+											<object class="AdwStatusPage">
+												<property name="title">Not implemented yet</property>
+											</object>
+										</property>
+									</object>
+								</child>
+								<child>
+									<object class="AdwViewStackPage">
+										<property name="name">settings</property>
+										<property name="title">Settings</property>
+										<property name="icon-name">preferences-system-symbolic</property>
+										<property name="child">
+											<object class="AdwClamp">
+												<child>
+													<object class="AdwPreferencesPage">
+														<child>
+															<object class="AdwPreferencesGroup">
+																<property name="title">Settings</property>
+																<child>
+																	<object class="AdwSwitchRow">
+																		<property name="title">Advertise via Network</property>
+																		<property name="subtitle">Allow all devices on your network to discover you</property>
+																	</object>
+																</child>
+															</object>
+														</child>
+														<child>
+															<object class="AdwPreferencesGroup">
+																<property name="title">Links / Help</property>
+																<child>
+																	<object class="AdwActionRow" id="showAboutAction">
+																		<property name="title">About</property>
+																		<property name="subtitle">View about dialog</property>
+																		<property name="activatable-widget">
+																			<object class="GtkButton" />
+																		</property>
+																	</object>
+																</child>
+															</object>
+														</child>
+													</object>
+												</child>
+											</object>
+										</property>
+									</object>
+								</child>
+							</object>
+						</child>
+					</object>
+				</property>
+				<child type="bottom">
+					<object class="AdwViewSwitcherBar" id="switcher_bar">
+						<property name="stack">stack</property>
+					</object>
+				</child>
+			</object>
+		</property>
+	</object>
+	<object class="AdwAboutDialog" id="aboutDialog">
+		<property name="application_name">NearShare</property>
+		<property name="developer_name">ShortDevelopment</property>
+		<property name="license_type">gpl-3-0</property>
+		<property name="website">https://newshare.shortdev.de</property>
+		<property name="issue-url">https://github.com/nearby-sharing/cli</property>
+	</object>
+</interface>
