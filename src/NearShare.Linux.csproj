@@ -9,15 +9,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Remove="SettingsDialog.xaml" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="GirCore.Adw-1" Version="0.6.2" />
 		<PackageReference Include="GirCore.Gtk-4.0" Version="0.6.2" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.2" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="MainWindow.xml">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
+		<EmbeddedResource Include="*.xaml" />
 	</ItemGroup>
 
 </Project>

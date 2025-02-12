@@ -11,12 +11,19 @@
 			<object class="AdwToolbarView">
 				<child type="top">
 					<object class="AdwHeaderBar">
+						<property name="show-title">true</property>
 						<property name="title-widget">
 							<object class="AdwViewSwitcher">
 								<property name="stack">stack</property>
 								<property name="policy">wide</property>
 							</object>
 						</property>
+						<child type="end">
+							<object class="GtkMenuButton" id="menu_button">
+								<property name="icon-name">open-menu-symbolic</property>
+								<property name="menu-model">main-menu</property>
+							</object>
+						</child>
 					</object>
 				</child>
 				<property name="content">
@@ -106,46 +113,6 @@
 										</property>
 									</object>
 								</child>
-								<child>
-									<object class="AdwViewStackPage">
-										<property name="name">settings</property>
-										<property name="title">Settings</property>
-										<property name="icon-name">preferences-system-symbolic</property>
-										<property name="child">
-											<object class="AdwClamp">
-												<child>
-													<object class="AdwPreferencesPage">
-														<child>
-															<object class="AdwPreferencesGroup">
-																<property name="title">Settings</property>
-																<child>
-																	<object class="AdwSwitchRow">
-																		<property name="title">Advertise via Network</property>
-																		<property name="subtitle">Allow all devices on your network to discover you</property>
-																	</object>
-																</child>
-															</object>
-														</child>
-														<child>
-															<object class="AdwPreferencesGroup">
-																<property name="title">Links / Help</property>
-																<child>
-																	<object class="AdwActionRow" id="showAboutAction">
-																		<property name="title">About</property>
-																		<property name="subtitle">View about dialog</property>
-																		<property name="activatable-widget">
-																			<object class="GtkButton" />
-																		</property>
-																	</object>
-																</child>
-															</object>
-														</child>
-													</object>
-												</child>
-											</object>
-										</property>
-									</object>
-								</child>
 							</object>
 						</child>
 					</object>
@@ -158,6 +125,16 @@
 			</object>
 		</property>
 	</object>
+	<menu id="main-menu">
+		<item>
+			<attribute name="label" translatable="yes">_Settings</attribute>
+			<attribute name="action">app.settings</attribute>
+		</item>
+		<item>
+			<attribute name="label" translatable="yes">_About</attribute>
+			<attribute name="action">app.about</attribute>
+		</item>
+	</menu>
 	<object class="AdwAboutDialog" id="aboutDialog">
 		<property name="application_name">NearShare</property>
 		<property name="developer_name">ShortDevelopment</property>

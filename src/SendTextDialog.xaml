@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<interface>
+	<object class="AdwMessageDialog" id="sendTextDialog">
+		<property name="heading" translatable="yes">Share text</property>
+		<property name="body" translatable="yes">Enter text below</property>
+		<property name="default-response">send</property>
+		<property name="close-response">cancel</property>
+		<child>
+			<object class="GtkTextView" id="textArea" />
+		</child>
+		<responses>
+			<response id="cancel" translatable="yes">_Cancel</response>
+			<response id="send" translatable="yes" appearance="suggested">_Send</response>
+		</responses>
+	</object>
+</interface>
