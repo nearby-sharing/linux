@@ -33,4 +33,8 @@ public readonly partial struct File : IDisposable
     {
         Extensions.Free(_handle);
     }
+
+    [LibraryImport(Libs.Gtk, EntryPoint = "g_file_get_type")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial GType GetGType();
 }

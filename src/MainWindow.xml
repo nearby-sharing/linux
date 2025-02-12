@@ -50,7 +50,7 @@
 										<property name="title">Send</property>
 										<property name="icon-name">go-up-symbolic</property>
 										<property name="child">
-											<object class="AdwClamp">
+											<object class="AdwClamp" id="sendPage">
 												<child>
 													<object class="AdwPreferencesPage">
 														<child>

@@ -1,8 +1,14 @@
-﻿using ShortDev.Gtk;
+﻿using Microsoft.Extensions.Logging;
+using ShortDev.Gtk;
 using System.Diagnostics;
 
-// https://docs.gtk.org/gtk4/index.html
-// https://gnome.pages.gitlab.gnome.org/libadwaita/doc/1-latest/index.html
+var loggerFactory = LoggerFactory.Create(builder =>
+{
+    builder.ClearProviders();
+    builder.AddConsole();
+
+    builder.SetMinimumLevel(LogLevel.Information);
+});
 
 return Application.Start("de.shortdev.nearshare", app =>
 {
@@ -11,6 +17,11 @@ return Application.Start("de.shortdev.nearshare", app =>
     var window = builder.GetObject<Window>("window");
     window.Present();
     app.AddWindow(window);
+
+    var sendPage = builder.GetObject<Widget>("sendPage");
+    DropTarget dropTarget = DropTarget.Create(ShortDev.Gtk.IO.File.GetGType(), DragAction.Copy);
+    dropTarget.Drop += DropTarget_Drop;
+    sendPage.AddController(dropTarget);
 
     var aboutDialog = builder.GetObject<Dialog>("aboutDialog");
 
@@ -41,4 +52,7 @@ return Application.Start("de.shortdev.nearshare", app =>
     };
 });
 
-delegate void ClickedCallback(nint button, nint userData);
+bool DropTarget_Drop(DropTarget target, nint value, double x, double y, nint userData)
+{
+    return true;
+}

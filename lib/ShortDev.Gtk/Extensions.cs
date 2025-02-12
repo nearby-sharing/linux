@@ -29,4 +29,11 @@ public static partial class Extensions
 
     public static ClipBoard GetClipBoard(this IWidget widget)
         => GetClipBoard(widget.Handle);
+
+    [LibraryImport(Libs.Gtk, EntryPoint = "gtk_widget_add_controller")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    private static unsafe partial void AddController(nint widget, nint controller);
+
+    public static void AddController(this IWidget widget, IEventController controller)
+        => AddController(widget.Handle, controller.Handle);
 }
