@@ -1,6 +1,5 @@
 ﻿using Adw;
 using Gdk;
-using Gio;
 using Gtk;
 using Microsoft.Extensions.Logging;
 using NearShare;
@@ -65,6 +64,8 @@ app.Run(args.Length, args);
 
 static bool DropTarget_OnDrop(DropTarget sender, DropTarget.DropSignalArgs args)
 {
-    FileHelper file = new(args.Value.GetObject()!.Handle);
+    if (args.Value.GetObject() is not Gio.File file)
+        return false;
+    Debug.Print(file.GetPath());
     return true;
 }
