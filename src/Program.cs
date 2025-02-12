@@ -1,6 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
-using ShortDev.Gtk;
+﻿using Adw;
+using Gdk;
+using Gio;
+using Gtk;
+using Microsoft.Extensions.Logging;
+using NearShare;
 using System.Diagnostics;
+using AdwApplication = Adw.Application;
 
 var loggerFactory = LoggerFactory.Create(builder =>
 {
@@ -10,49 +15,56 @@ var loggerFactory = LoggerFactory.Create(builder =>
     builder.SetMinimumLevel(LogLevel.Information);
 });
 
-return Application.Start("de.shortdev.nearshare", app =>
+var app = AdwApplication.New("de.shortdev.nearshare", Gio.ApplicationFlags.FlagsNone);
+app.OnActivate += static (app, args) =>
 {
-    var builder = GtkBuilder.FromString(File.ReadAllText("MainWindow.xml"));
+    var builder = Builder.NewFromString(System.IO.File.ReadAllText("MainWindow.xml"), -1);
 
-    var window = builder.GetObject<Window>("window");
+    var window = (Adw.Window)builder.GetObject("window")!;
     window.Present();
-    app.AddWindow(window);
+    ((AdwApplication)app).AddWindow(window);
 
-    var sendPage = builder.GetObject<Widget>("sendPage");
-    DropTarget dropTarget = DropTarget.Create(ShortDev.Gtk.IO.File.GetGType(), DragAction.Copy);
-    dropTarget.Drop += DropTarget_Drop;
+    var sendPage = (Widget)builder.GetObject("sendPage")!;
+    DropTarget dropTarget = DropTarget.New(Gio.FileHelper.GetGType(), DragAction.Copy);
+    dropTarget.OnDrop += DropTarget_OnDrop;
     sendPage.AddController(dropTarget);
 
-    var aboutDialog = builder.GetObject<Dialog>("aboutDialog");
+    var aboutDialog = builder.GetObject<Adw.Dialog>("aboutDialog")!;
 
-    var shareFileAction = builder.GetObject<ActionRow>("shareFileAction");
-    shareFileAction.Activated += async (button, data) =>
+    var shareFileAction = builder.GetObject<ActionRow>("shareFileAction")!;
+    shareFileAction.OnActivated += async (button, data) =>
     {
-        var dialog = FileDialog.Create();
-        var path = await dialog.OpenFileAsync(window);
-        Debug.Print(path);
+        var dialog = FileDialog.New();
+        var file = await dialog.OpenAsync(window);
+        if (file is null)
+            return;
+
+        Debug.Print(file.GetPath());
     };
 
-    var shareClipboardAction = builder.GetObject<ActionRow>("shareClipboardAction");
-    shareClipboardAction.Activated += async (button, data) =>
+    var shareClipboardAction = builder.GetObject<ActionRow>("shareClipboardAction")!;
+    shareClipboardAction.OnActivated += async (button, data) =>
     {
-        var clipboardContent = await button.GetClipBoard().ReadTextAsync();
-
+        var clipboardContent = await button.GetClipboard().ReadTextAsync();
+        Debug.Print(clipboardContent);
     };
 
-    var shareTextAction = builder.GetObject<ActionRow>("shareTextAction");
-    shareTextAction.Activated += (button, data) =>
+    var shareTextAction = builder.GetObject<ActionRow>("shareTextAction")!;
+    shareTextAction.OnActivated += (button, data) =>
     {
     };
 
-    var showAboutAction = builder.GetObject<ActionRow>("showAboutAction");
-    showAboutAction.Activated += (button, data) =>
+    var showAboutAction = builder.GetObject<ActionRow>("showAboutAction")!;
+    showAboutAction.OnActivated += (button, data) =>
     {
         aboutDialog.Present(button);
     };
-});
+};
 
-bool DropTarget_Drop(DropTarget target, nint value, double x, double y, nint userData)
+app.Run(args.Length, args);
+
+static bool DropTarget_OnDrop(DropTarget sender, DropTarget.DropSignalArgs args)
 {
+    FileHelper file = new(args.Value.GetObject()!.Handle);
     return true;
 }

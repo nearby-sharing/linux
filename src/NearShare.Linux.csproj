@@ -9,11 +9,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="GirCore.Adw-1" Version="0.6.2" />
+		<PackageReference Include="GirCore.Gtk-4.0" Version="0.6.2" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.2" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\lib\ShortDev.Gtk\ShortDev.Gtk.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
