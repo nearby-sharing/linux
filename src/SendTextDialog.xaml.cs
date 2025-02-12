@@ -1,5 +1,4 @@
 ﻿using Gtk;
-using System.Diagnostics;
 
 namespace NearShare;
 
@@ -21,11 +20,12 @@ sealed class SendTextDialog
         _sendTextDialog.Present();
     }
 
+    public required Action<string?> SendText;
     void SendTextDialog_OnResponse(Adw.MessageDialog sender, Adw.MessageDialog.ResponseSignalArgs args)
     {
         if (args.Response != "send")
             return;
 
-        Debug.Print(_textArea.Buffer?.Text);
+        SendText(_textArea.Buffer?.Text);
     }
 }

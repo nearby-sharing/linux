@@ -11,12 +11,12 @@ var loggerFactory = LoggerFactory.Create(builder =>
 });
 
 var app = Adw.Application.New("de.shortdev.nearshare", Gio.ApplicationFlags.FlagsNone);
-app.OnActivate += static (app, args) =>
+app.OnActivate += (app, args) =>
 {
     StyleManager.GetDefault().ColorScheme = ColorScheme.PreferDark;
 
-    MainWindow window = new((Adw.Application)app);
+    MainWindow window = new((Adw.Application)app, loggerFactory);
     window.Present();
 };
 
-app.Run(args.Length, args);
+return app.RunWithSynchronizationContext(args);

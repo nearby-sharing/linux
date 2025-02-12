@@ -1,0 +1,3 @@
+[submodule "lib/android"]
+	path = lib/android
+	url = git@github.com:nearby-sharing/android.git

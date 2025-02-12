@@ -10,6 +10,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{13E59A0C
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShortDev.Microsoft.ConnectedDevices", "lib\android\lib\ShortDev.Microsoft.ConnectedDevices\ShortDev.Microsoft.ConnectedDevices.csproj", "{3C9CB95B-7874-0B44-4397-BEA186A46DA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShortDev.Microsoft.ConnectedDevices.NearShare", "lib\android\lib\ShortDev.Microsoft.ConnectedDevices.NearShare\ShortDev.Microsoft.ConnectedDevices.NearShare.csproj", "{946A8D25-2DB2-B9FA-09A5-CAD884B3DE5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NearShare.GtkUtils", "lib\NearShare.GtkUtils\NearShare.GtkUtils.csproj", "{197AD303-EBDB-4D44-8A97-19A7FC3575E4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,8 +28,28 @@ Global
 		{B478035B-628D-4004-AA63-B460858DEEF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B478035B-628D-4004-AA63-B460858DEEF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B478035B-628D-4004-AA63-B460858DEEF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C9CB95B-7874-0B44-4397-BEA186A46DA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C9CB95B-7874-0B44-4397-BEA186A46DA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C9CB95B-7874-0B44-4397-BEA186A46DA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C9CB95B-7874-0B44-4397-BEA186A46DA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{946A8D25-2DB2-B9FA-09A5-CAD884B3DE5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{946A8D25-2DB2-B9FA-09A5-CAD884B3DE5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{946A8D25-2DB2-B9FA-09A5-CAD884B3DE5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{946A8D25-2DB2-B9FA-09A5-CAD884B3DE5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{197AD303-EBDB-4D44-8A97-19A7FC3575E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{197AD303-EBDB-4D44-8A97-19A7FC3575E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{197AD303-EBDB-4D44-8A97-19A7FC3575E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{197AD303-EBDB-4D44-8A97-19A7FC3575E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3C9CB95B-7874-0B44-4397-BEA186A46DA7} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{946A8D25-2DB2-B9FA-09A5-CAD884B3DE5A} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{197AD303-EBDB-4D44-8A97-19A7FC3575E4} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4AE795C4-4D66-48B8-B93C-4DE3CDAB0C12}
 	EndGlobalSection
 EndGlobal

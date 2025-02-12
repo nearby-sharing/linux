@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="GirCore.GObject-2.0" Version="0.6.2" />
+		<PackageReference Include="GirCore.GObject-2.0.Integration" Version="0.6.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\android\lib\ShortDev.Microsoft.ConnectedDevices\ShortDev.Microsoft.ConnectedDevices.csproj" />
+	</ItemGroup>
+
+</Project>

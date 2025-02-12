@@ -1,7 +1,7 @@
 ﻿using Adw;
 using Gdk;
 using Gtk;
-using System.Diagnostics;
+using Microsoft.Extensions.Logging;
 
 namespace NearShare;
 
@@ -9,9 +9,11 @@ sealed class MainWindow
 {
     readonly Adw.Application _app;
     readonly Adw.Window _window;
-    public MainWindow(Adw.Application app)
+    readonly ILoggerFactory _loggerFactory;
+    public MainWindow(Adw.Application app, ILoggerFactory loggerFactory)
     {
         _app = app;
+        _loggerFactory = loggerFactory;
         var builder = Utils.LoadUI<MainWindow>();
 
         _window = (Adw.Window)builder.GetObject("window")!;
@@ -68,10 +70,10 @@ sealed class MainWindow
             {
                 var dialog = FileDialog.New();
                 var file = await dialog.OpenAsync(_window);
-                if (file is null)
+                if (file is null || file.GetPath() is null)
                     return;
 
-                Debug.Print(file.GetPath());
+                SendFile(file);
             };
         }
 
@@ -81,7 +83,7 @@ sealed class MainWindow
             shareClipboardAction.OnActivated += async (button, data) =>
             {
                 var clipboardContent = await button.GetClipboard().ReadTextAsync();
-                Debug.Print(clipboardContent);
+                SendText(clipboardContent);
             };
         }
 
@@ -90,17 +92,49 @@ sealed class MainWindow
             var shareTextAction = builder.GetObject<ActionRow>("shareTextAction")!;
             shareTextAction.OnActivated += (button, data) =>
             {
-                SendTextDialog dialog = new();
+                SendTextDialog dialog = new()
+                {
+                    SendText = SendText
+                };
                 dialog.Present(_window);
             };
         }
     }
 
-    static bool DropTarget_OnDrop(DropTarget sender, DropTarget.DropSignalArgs args)
+    bool DropTarget_OnDrop(DropTarget sender, DropTarget.DropSignalArgs args)
     {
         if (args.Value.GetObject() is not Gio.File file)
             return false;
-        Debug.Print(file.GetPath());
+
+        if (file.GetPath() is null)
+            return false;
+
+        SendFile(file);
         return true;
+    }
+
+    void SendFile(Gio.File file)
+        => StartTransfer(new FileTransfer(file));
+
+    void SendText(string? text)
+    {
+        if (text is null)
+            return;
+
+        if (Uri.TryCreate(text, UriKind.Absolute, out var uri))
+        {
+            StartTransfer(new UriTransfer(uri));
+            return;
+        }
+
+        StartTransfer(new TextTransfer(text));
+    }
+
+    async void StartTransfer(ITransfer transfer)
+    {
+        using var cdp = CdpUtils.Create(Environment.MachineName, _loggerFactory);
+        using ShareDialog dialog = new(transfer, cdp);
+        dialog.Present(_window);
+        await dialog.ExecuteAsync(transfer);
     }
 }

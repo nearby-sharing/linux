@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<interface>
+	<object class="AdwDialog" id="dialog">
+		<property name="title">Share</property>
+		<child>
+			<object class="AdwToolbarView">
+				<child type="top">
+					<object class="AdwHeaderBar">
+						<child type="start">
+							<object class="GtkButton" id="cancelButton">
+								<property name="label" translatable="yes">Cancel</property>
+							</object>
+						</child>
+					</object>
+				</child>
+				<property name="content">
+					<object class="AdwClamp">
+						<child>
+							<object class="GtkBox">
+								<property name="halign">fill</property>
+								<property name="hexpand">true</property>
+								<child>
+									<object class="AdwSpinner">
+										<property name="width-request">48</property>
+										<property name="height-request">48</property>
+									</object>
+								</child>
+								<child>
+									<object class="GtkGridView" id="deviceList" />
+								</child>
+							</object>
+						</child>
+					</object>
+				</property>
+			</object>
+		</child>
+	</object>
+</interface>
