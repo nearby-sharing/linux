@@ -23,8 +23,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\lib\android\lib\ShortDev.Microsoft.ConnectedDevices.NearShare\ShortDev.Microsoft.ConnectedDevices.NearShare.csproj" />
-	  <ProjectReference Include="..\lib\NearShare.GtkUtils\NearShare.GtkUtils.csproj" />
+		<ProjectReference Include="..\lib\android\lib\ShortDev.Microsoft.ConnectedDevices.NearShare\ShortDev.Microsoft.ConnectedDevices.NearShare.csproj" />
+		<ProjectReference Include="..\lib\NearShare.GtkUtils\NearShare.GtkUtils.csproj" />
+		<ProjectReference Include="..\lib\NearShare.Linux.Bluetooth\NearShare.Linux.Bluetooth.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShortDev.Microsoft.Connecte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NearShare.GtkUtils", "lib\NearShare.GtkUtils\NearShare.GtkUtils.csproj", "{197AD303-EBDB-4D44-8A97-19A7FC3575E4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NearShare.Linux.Bluetooth", "lib\NearShare.Linux.Bluetooth\NearShare.Linux.Bluetooth.csproj", "{35824E62-956B-4363-B128-0E7EBE392485}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{197AD303-EBDB-4D44-8A97-19A7FC3575E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{197AD303-EBDB-4D44-8A97-19A7FC3575E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{197AD303-EBDB-4D44-8A97-19A7FC3575E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35824E62-956B-4363-B128-0E7EBE392485}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35824E62-956B-4363-B128-0E7EBE392485}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35824E62-956B-4363-B128-0E7EBE392485}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35824E62-956B-4363-B128-0E7EBE392485}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +54,7 @@ Global
 		{3C9CB95B-7874-0B44-4397-BEA186A46DA7} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{946A8D25-2DB2-B9FA-09A5-CAD884B3DE5A} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{197AD303-EBDB-4D44-8A97-19A7FC3575E4} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{35824E62-956B-4363-B128-0E7EBE392485} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4AE795C4-4D66-48B8-B93C-4DE3CDAB0C12}

@@ -132,7 +132,7 @@ sealed class MainWindow
 
     async void StartTransfer(ITransfer transfer)
     {
-        using var cdp = CdpUtils.Create(Environment.MachineName, _loggerFactory);
+        using var cdp = await CdpUtils.Create(Environment.MachineName, _loggerFactory);
         using ShareDialog dialog = new(transfer, cdp);
         dialog.Present(_window);
         await dialog.ExecuteAsync(transfer);
