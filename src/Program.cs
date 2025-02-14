@@ -19,4 +19,6 @@ app.OnActivate += (app, args) =>
     window.Present();
 };
 
-return app.RunWithSynchronizationContext(args);
+SynchronizationContext.SetSynchronizationContext(new GtkSynchronizationContext());
+
+return app.Run(args.Length, args);
