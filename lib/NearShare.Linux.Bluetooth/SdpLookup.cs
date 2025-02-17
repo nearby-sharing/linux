@@ -1,5 +1,6 @@
 // https://github.com/blueman-project/blueman/blob/64f9cfb5201232b58d109387285d59c27ee434f8/module/libblueman.c#L355
 // https://github.com/bluez/bluez/blob/master/lib/sdp_lib.h
+// https://people.csail.mit.edu/rudolph/Teaching/Articles/BTBook.pdf
 
 using System.Buffers.Binary;
 using System.Net.NetworkInformation;
@@ -17,14 +18,8 @@ public static partial class SdpLookup
         byte[] addressBytes = macAddress.GetAddressBytes(); // Big endian
         addressBytes.AsSpan().Reverse();
 
-        using var results = ExecuteSdpQuery(addressBytes, serviceId);
-        Console.WriteLine("Hi!");
-        var port = GetProtocolPort(results, RFCOMM_UUID);
-        Console.WriteLine($"Port {port}");
-        return port;
-
         int port_num = 0;
-        foreach (SdpRecord* record in results)
+        foreach (SdpRecord* record in ExecuteSdpQuery(addressBytes, serviceId))
         {
             try
             {
@@ -32,37 +27,10 @@ public static partial class SdpLookup
                 if (GetAccessProtocols(record, out var protocolList) != 0)
                     continue;
 
-                Console.WriteLine($"Test={(nint)((SdpData*)((SdpListElement*)protocolList.head->data)->data)->next}");
-
-                // go through each protocol sequence
-                foreach (nint protocol in protocolList)
+                using (protocolList)
                 {
-                    // go through each protocol list of the protocol sequence
-                    foreach (nint pds in Unsafe.BitCast<nint, SdpList>(protocol))
-                    {
-                        // check the protocol attributes
-                        int currentProtocolId = 0;
-                        for (var d = (SdpData*)pds; d != null; d = d->next)
-                        {
-                            Console.WriteLine($"Type={d->type}; Next={(nint)d->next}");
-                            switch (d->type)
-                            {
-                                case SdpType.UUID16:
-                                case SdpType.UUID32:
-                                case SdpType.UUID128:
-                                    currentProtocolId = d->value.uuid.AsProtocol();
-                                    Console.WriteLine($"Protocol {currentProtocolId} {d->value.uuid.value.guid}");
-                                    break;
-                                case SdpType.UINT8:
-                                    if (currentProtocolId == RFCOMM_UUID)
-                                    {
-                                        port_num = d->value.int8;
-                                    }
-                                    Console.WriteLine($"port_num = {d->value.uint8}");
-                                    break;
-                            }
-                        }
-                    }
+                    port_num = GetProtocolPort(protocolList, RFCOMM_UUID);
+                    Console.WriteLine($"Port {port_num}");
                 }
             }
             finally
