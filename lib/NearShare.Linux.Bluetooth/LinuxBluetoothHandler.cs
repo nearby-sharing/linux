@@ -1,4 +1,5 @@
-﻿using ShortDev.Microsoft.ConnectedDevices;
+﻿using InTheHand.Net;
+using ShortDev.Microsoft.ConnectedDevices;
 using ShortDev.Microsoft.ConnectedDevices.Transports;
 using ShortDev.Microsoft.ConnectedDevices.Transports.Bluetooth;
 using Spectre.Console;
@@ -110,15 +111,23 @@ public sealed class LinuxBluetoothHandler : IBluetoothHandler
 
     public async Task<CdpSocket> ConnectRfcommAsync(EndpointInfo endpoint, RfcommOptions options, CancellationToken cancellationToken = default)
     {
-        var device = await _manager.GetDeviceAsync(endpoint.Address);
+        Guid serviceId = Guid.Parse(options.ServiceId!);
+        BluetoothAddress address = BluetoothAddress.Parse(endpoint.Address);
+        var port = SdpLookup.GetRfcommChannel(PhysicalAddress.Parse(endpoint.Address), serviceId);
+        Console.WriteLine($"Resolved rfcomm port for {serviceId}@{endpoint.Address} to {port}");
 
-        var stream = await _manager.CreateRfcommSocketAsync(device, options.ServiceId!);
-        return new()
+        InTheHand.Net.Sockets.BluetoothClient client = new();
+        client.Connect(new BluetoothEndPoint(address, serviceId, port));
+        return new CdpSocket()
         {
             Endpoint = endpoint,
-            InputStream = stream,
-            OutputStream = stream,
-            Close = stream.Close
+            InputStream = client.GetStream(),
+            OutputStream = client.GetStream(),
+            Close = () =>
+            {
+                client.Close();
+                client.Dispose();
+            }
         };
     }
 
