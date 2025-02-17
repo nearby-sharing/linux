@@ -3,7 +3,7 @@
 // https://people.csail.mit.edu/rudolph/Teaching/Articles/BTBook.pdf
 
 using System.Buffers.Binary;
-using System.Net.NetworkInformation;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using NearShare.Linux.Bluetooth.ServiceDiscovery;
@@ -13,13 +13,10 @@ namespace NearShare.Linux.Bluetooth;
 public static partial class SdpLookup
 {
     const uint RFCOMM_UUID = 0x0003;
-    public static unsafe int GetRfcommChannel(PhysicalAddress macAddress, Guid serviceId)
+    public static unsafe int GetRfcommChannel(BluetoothAddress address, Guid serviceId)
     {
-        byte[] addressBytes = macAddress.GetAddressBytes(); // Big endian
-        addressBytes.AsSpan().Reverse();
-
         int port_num = 0;
-        foreach (SdpRecord* record in ExecuteSdpQuery(addressBytes, serviceId))
+        foreach (SdpRecord* record in ExecuteSdpQuery(address, serviceId))
         {
             try
             {
@@ -41,10 +38,9 @@ public static partial class SdpLookup
         return port_num;
     }
 
-    static unsafe SdpList ExecuteSdpQuery(ReadOnlySpan<byte> address, Guid serviceId)
+    static unsafe SdpList ExecuteSdpQuery(BluetoothAddress address, Guid serviceId)
     {
-        BluetoothAddress target = BluetoothAddress.FromSpan(address);
-        using var session = Connect(BluetoothAddress.Any, target, SdpConnectFlags.RETRY_IF_BUSY);
+        using var session = Connect(BluetoothAddress.Any, address, SdpConnectFlags.RETRY_IF_BUSY);
 
         if (SdpSession.IsNull(session))
             throw new InvalidOperationException($"Could not connect to {address.ToString()} via sdp");
@@ -105,28 +101,12 @@ public static partial class SdpLookup
 
         public void Dispose()
         {
-            Close(this);
+            if (Close(this) != 0)
+                throw new Win32Exception(Marshal.GetLastSystemError());
         }
 
         public static bool IsNull(SdpSession session)
             => session._handle <= 0;
-    }
-
-    [InlineArray(6)]
-    struct BluetoothAddress
-    {
-        byte _element0;
-
-        public static BluetoothAddress Any { get; } = default;
-        public static BluetoothAddress All { get; } = FromSpan([0xff, 0xff, 0xff, 0xff, 0xff, 0xff]);
-        public static BluetoothAddress Local { get; } = FromSpan([0, 0, 0, 0xff, 0xff, 0xff]);
-
-        public static BluetoothAddress FromSpan(ReadOnlySpan<byte> value)
-        {
-            BluetoothAddress result = default;
-            value.CopyTo(result);
-            return result;
-        }
     }
 
     [LibraryImport("libbluetooth.so", EntryPoint = "sdp_service_search_attr_req")]

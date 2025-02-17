@@ -1,9 +1,9 @@
-﻿using InTheHand.Net;
-using ShortDev.Microsoft.ConnectedDevices;
+﻿using ShortDev.Microsoft.ConnectedDevices;
 using ShortDev.Microsoft.ConnectedDevices.Transports;
 using ShortDev.Microsoft.ConnectedDevices.Transports.Bluetooth;
 using Spectre.Console;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Runtime.Versioning;
 using Tmds.DBus.Protocol;
 
@@ -112,21 +112,26 @@ public sealed class LinuxBluetoothHandler : IBluetoothHandler
     public async Task<CdpSocket> ConnectRfcommAsync(EndpointInfo endpoint, RfcommOptions options, CancellationToken cancellationToken = default)
     {
         Guid serviceId = Guid.Parse(options.ServiceId!);
-        BluetoothAddress address = BluetoothAddress.Parse(endpoint.Address);
-        var port = SdpLookup.GetRfcommChannel(PhysicalAddress.Parse(endpoint.Address), serviceId);
+
+        BluetoothAddress address = BluetoothAddress.FromPhysicalAddress(
+            PhysicalAddress.Parse(endpoint.Address)
+        );
+        var port = SdpLookup.GetRfcommChannel(address, serviceId);
         Console.WriteLine($"Resolved rfcomm port for {serviceId}@{endpoint.Address} to {port}");
 
-        InTheHand.Net.Sockets.BluetoothClient client = new();
-        client.Connect(new BluetoothEndPoint(address, serviceId, port));
+        await Task.Yield();
+
+        var socket = UnixSockets.ConnectRfcomm(address, (byte)port);
+        NetworkStream stream = new(socket, ownsSocket: true);
         return new CdpSocket()
         {
             Endpoint = endpoint,
-            InputStream = client.GetStream(),
-            OutputStream = client.GetStream(),
+            InputStream = stream,
+            OutputStream = stream,
             Close = () =>
             {
-                client.Close();
-                client.Dispose();
+                stream.Close();
+                stream.Dispose();
             }
         };
     }
