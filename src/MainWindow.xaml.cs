@@ -135,6 +135,6 @@ sealed class MainWindow
         using var cdp = await CdpUtils.Create(Environment.MachineName, _loggerFactory);
         using ShareDialog dialog = new(transfer, cdp);
         dialog.Present(_window);
-        await dialog.ExecuteAsync(transfer);
+        await dialog.ExecuteAsync();
     }
 }
