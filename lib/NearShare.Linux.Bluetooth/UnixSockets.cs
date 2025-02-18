@@ -1,3 +1,4 @@
+using System.Buffers.Binary;
 using System.ComponentModel;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
@@ -7,9 +8,15 @@ namespace NearShare.Linux.Bluetooth;
 
 static partial class UnixSockets
 {
+    const int SOL_BLUETOOTH = 274;
+    const int BT_SECURITY = 4;
     public static unsafe Socket ConnectRfcomm(BluetoothAddress address, byte channel)
     {
         var handle = Create(UnixAddressFamily.Bluetooth, UnixSocketType.Stream, UnixSocketProtocol.Rfcomm);
+        Socket socket = new(handle);
+
+        // Might already be the default
+        SetSocketOption(socket, SOL_BLUETOOTH, BT_SECURITY, (uint)SocketSecurity.Low);
 
         RfcommSocketAddress rfcommAddress = new()
         {
@@ -21,9 +28,15 @@ static partial class UnixSockets
         if (result != 0)
             throw new Win32Exception(Marshal.GetLastSystemError());
 
-        Socket socket = new(handle);
         IsConnected(socket) = true;
         return socket;
+    }
+
+    static void SetSocketOption(Socket socket, int level, int optionName, uint value)
+    {
+        Span<byte> buffer = stackalloc byte[4];
+        BinaryPrimitives.WriteUInt32LittleEndian(buffer, value);
+        socket.SetRawSocketOption(level, optionName, buffer);
     }
 
     [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_isConnected")]
@@ -59,4 +72,15 @@ static partial class UnixSockets
     [LibraryImport("libc", EntryPoint = "connect")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static unsafe partial int ConnectRfcomm(SafeSocketHandle socket, in RfcommSocketAddress address, int addressSize);
+
+    // Socket Options
+
+    enum SocketSecurity
+    {
+        Sdp,
+        Low,
+        Medium,
+        High,
+        Fips
+    }
 }

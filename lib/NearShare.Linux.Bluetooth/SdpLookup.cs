@@ -1,7 +1,3 @@
-// https://github.com/blueman-project/blueman/blob/64f9cfb5201232b58d109387285d59c27ee434f8/module/libblueman.c#L355
-// https://github.com/bluez/bluez/blob/master/lib/sdp_lib.h
-// https://people.csail.mit.edu/rudolph/Teaching/Articles/BTBook.pdf
-
 using System.Buffers.Binary;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
