@@ -5,7 +5,7 @@ This is a small gtk 4 (+ libadwaita) gui allowing you to send and receive files 
 > You don't need to install anything on Windows as this is the native Windows Nearby Sharing protocol.
 
 > [!WARNING]
-> This app is still in preview and might be unstable.   
+> This app is still WIP and might is unstable.   
 > You have to build it from source.
 
 ## Development
