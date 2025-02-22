@@ -10,6 +10,7 @@ sealed class MainWindow
     readonly Adw.Application _app;
     readonly Adw.Window _window;
     readonly ILoggerFactory _loggerFactory;
+
     public MainWindow(Adw.Application app, ILoggerFactory loggerFactory)
     {
         _app = app;
@@ -45,10 +46,7 @@ sealed class MainWindow
         {
             var aboutDialog = builder.GetObject<Adw.Dialog>("aboutDialog")!;
             var aboutAction = Gio.SimpleAction.New("about", null);
-            aboutAction.OnActivate += (s, e) =>
-            {
-                aboutDialog.Present(_window);
-            };
+            aboutAction.OnActivate += (s, e) => { aboutDialog.Present(_window); };
             _app.AddAction(aboutAction);
         }
     }
@@ -69,8 +67,17 @@ sealed class MainWindow
             shareFileAction.OnActivated += async (button, data) =>
             {
                 var dialog = FileDialog.New();
-                var file = await dialog.OpenAsync(_window);
-                if (file is null || file.GetPath() is null)
+
+                Gio.File? file = null;
+                try
+                {
+                    file = await dialog.OpenAsync(_window);
+                }
+                catch
+                {
+                }
+
+                if (file?.GetPath() is null)
                     return;
 
                 SendFile(file);
@@ -82,7 +89,18 @@ sealed class MainWindow
             var shareClipboardAction = builder.GetObject<ActionRow>("shareClipboardAction")!;
             shareClipboardAction.OnActivated += async (button, data) =>
             {
-                var clipboardContent = await button.GetClipboard().ReadTextAsync();
+                string? clipboardContent = null;
+                try
+                {
+                    clipboardContent = await button.GetClipboard().ReadTextAsync();
+                }
+                catch
+                {
+                }
+
+                if (string.IsNullOrEmpty(clipboardContent))
+                    return;
+
                 SendText(clipboardContent);
             };
         }
