@@ -20,11 +20,13 @@ unsafe readonly partial struct SdpList : IDisposable
         return ListAppend(default, value);
     }
 
-    [LibraryImport("libbluetooth.so", EntryPoint = "sdp_list_free")]
+    [LibraryImport(UnixConstants.LibBluetooth, EntryPoint = "sdp_list_free")]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static unsafe partial void Free(SdpList list, nint unused);
 
-    [LibraryImport("libbluetooth.so", EntryPoint = "sdp_list_append")]
+    [LibraryImport(UnixConstants.LibBluetooth, EntryPoint = "sdp_list_append")]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static unsafe partial SdpList ListAppend(SdpList list, void* value);
 }

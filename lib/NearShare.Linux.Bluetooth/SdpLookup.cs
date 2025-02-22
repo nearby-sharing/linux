@@ -70,15 +70,18 @@ public static partial class SdpLookup
         return results;
     }
 
-    [LibraryImport("libbluetooth.so", EntryPoint = "sdp_connect")]
+    [LibraryImport(UnixConstants.LibBluetooth, EntryPoint = "sdp_connect")]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static partial SdpSession Connect(in BluetoothAddress src, in BluetoothAddress dst, SdpConnectFlags flags);
 
-    [LibraryImport("libbluetooth.so", EntryPoint = "sdp_close")]
+    [LibraryImport(UnixConstants.LibBluetooth, EntryPoint = "sdp_close")]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static partial int Close(SdpSession session);
 
-    [LibraryImport("libbluetooth.so", EntryPoint = "sdp_get_proto_port")]
+    [LibraryImport(UnixConstants.LibBluetooth, EntryPoint = "sdp_get_proto_port")]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static partial int GetProtocolPort(SdpList list, uint protocol);
 
@@ -105,7 +108,8 @@ public static partial class SdpLookup
             => session._handle <= 0;
     }
 
-    [LibraryImport("libbluetooth.so", EntryPoint = "sdp_service_search_attr_req")]
+    [LibraryImport(UnixConstants.LibBluetooth, EntryPoint = "sdp_service_search_attr_req")]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static unsafe partial int ServiceSearchAttributeRequest(SdpSession session, SdpList search, AttributeRequestType type, SdpList attributes, out SdpList services);
 
@@ -124,11 +128,13 @@ public static partial class SdpLookup
         public Uuid serviceClass;
     }
 
-    [LibraryImport("libbluetooth.so", EntryPoint = "sdp_get_access_protos")]
+    [LibraryImport(UnixConstants.LibBluetooth, EntryPoint = "sdp_get_access_protos")]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static unsafe partial int GetAccessProtocols(SdpRecord* record, out SdpList protocols);
 
-    [LibraryImport("libbluetooth.so", EntryPoint = "sdp_record_free")]
+    [LibraryImport(UnixConstants.LibBluetooth, EntryPoint = "sdp_record_free")]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static unsafe partial void Free(SdpRecord* record);
 }
