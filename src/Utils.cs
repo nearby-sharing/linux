@@ -1,4 +1,5 @@
-﻿using Gtk;
+﻿using GLib;
+using Gtk;
 
 namespace NearShare;
 
@@ -9,9 +10,20 @@ static class Utils
         Type type = typeof(T);
 
         using var stream = type.Assembly.GetManifestResourceStream($"{type.FullName}.xaml")
-            ?? throw new InvalidOperationException($"Could not load ui for {type.FullName}");
+                           ?? throw new InvalidOperationException($"Could not load ui for {type.FullName}");
 
         using StreamReader reader = new(stream);
         return Builder.NewFromString(reader.ReadToEnd(), -1);
+    }
+
+    public static Bytes LoadTemplate<T>(string name)
+    {
+        Type type = typeof(T);
+
+        using var stream = type.Assembly.GetManifestResourceStream($"{type.Namespace}.{name}.xaml")
+                           ?? throw new InvalidOperationException($"Could not load ui for {type.Namespace}.{name}");
+        byte[] data = new byte[stream.Length];
+        stream.ReadExactly(data);
+        return Bytes.New(data);
     }
 }

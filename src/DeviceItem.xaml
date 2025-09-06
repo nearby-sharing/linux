@@ -1,0 +1,51 @@
+<interface>
+    <template class="GtkListItem">
+        <property name="child">
+            <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="spacing">2</property>
+                <child>
+                    <object class="GtkGrid">
+                        <property name="halign">center</property>
+                        <child>
+                            <object class="GtkOverlay">
+                                <child>
+                                    <object class="GtkImage">
+                                        <binding name="icon-name">
+                                            <lookup name="DeviceTypeIconName" type="NearShareGtkUtilsDeviceWrapper">
+                                                <lookup name="item">GtkListItem</lookup>
+                                            </lookup>
+                                        </binding>
+                                        <property name="pixel-size">50</property>
+                                    </object>
+                                </child>
+                                <child type="overlay">
+                                    <object class="GtkImage">
+                                        <property name="visible">true</property>
+                                        <binding name="icon-name">
+                                            <lookup name="TransportTypeItemName" type="NearShareGtkUtilsDeviceWrapper">
+                                                <lookup name="item">GtkListItem</lookup>
+                                            </lookup>
+                                        </binding>
+                                        <property name="pixel-size">20</property>
+                                        <property name="halign">end</property>
+                                        <property name="valign">end</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkLabel">
+                        <binding name="label">
+                            <lookup name="DeviceName" type="NearShareGtkUtilsDeviceWrapper">
+                                <lookup name="item">GtkListItem</lookup>
+                            </lookup>
+                        </binding>
+                    </object>
+                </child>
+            </object>
+        </property>
+    </template>
+</interface>

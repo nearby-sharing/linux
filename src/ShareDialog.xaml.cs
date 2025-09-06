@@ -10,7 +10,7 @@ sealed class ShareDialog : IDisposable
 {
     readonly ITransfer _transfer;
     readonly Adw.Dialog _dialog;
-    readonly Gtk.Stack _stack;
+    readonly Adw.ViewStack _stack;
     readonly Gio.ListStore _deviceList;
     readonly ConnectedDevicesPlatform _cdp;
     public ShareDialog(ITransfer transfer, ConnectedDevicesPlatform cdp)
@@ -21,7 +21,7 @@ sealed class ShareDialog : IDisposable
         var builder = Utils.LoadUI<ShareDialog>();
         _dialog = builder.GetObject<Adw.Dialog>("dialog")!;
 
-        _stack = builder.GetObject<Gtk.Stack>("stack")!;
+        _stack = builder.GetObject<Adw.ViewStack>("stack")!;
         _deviceList = SetupDeviceSelection(builder.GetObject<GridView>("deviceList")!);
     }
 
@@ -29,36 +29,13 @@ sealed class ShareDialog : IDisposable
     {
         Gio.ListStore items = Gio.ListStore.New(DeviceWrapper.GetGType());
 
-        var itemFactory = SignalListItemFactory.New();
-        itemFactory.OnSetup += DeviceSelect_OnSetupItem;
-        itemFactory.OnBind += DeviceSelect_OnBindItem;
+        var itemFactory = BuilderListItemFactory.NewFromBytes(null, Utils.LoadTemplate<ShareDialog>("DeviceItem"));
 
         gridView.Model = SingleSelection.New(items);
         gridView.Factory = itemFactory;
         gridView.OnActivate += GridView_OnActivate;
 
         return items;
-    }
-
-    private void DeviceSelect_OnSetupItem(SignalListItemFactory sender, SignalListItemFactory.SetupSignalArgs args)
-    {
-        if (args.Object is not ListItem listItem)
-            return;
-
-        var box = Box.New(Orientation.Vertical, 2);
-        box.SetSizeRequest(100, 100);
-        listItem.Child = box;
-        var label = Label.New(null);
-        box.Append(label);
-    }
-
-    private void DeviceSelect_OnBindItem(SignalListItemFactory sender, SignalListItemFactory.BindSignalArgs args)
-    {
-        if (args.Object is not ListItem { Child: Box box, Item: DeviceWrapper { Device: CdpDevice device } })
-            return;
-
-        var label = (Label)box.GetFirstChild()!;
-        label.SetText($"{device.Name} {device.Type} {device.Endpoint.TransportType}");
     }
 
     public void Present(Window window)

@@ -1,4 +1,5 @@
-﻿using Adw;
+﻿using System.Reflection;
+using Adw;
 using Microsoft.Extensions.Logging;
 using NearShare;
 
@@ -11,6 +12,7 @@ var loggerFactory = LoggerFactory.Create(builder =>
 });
 
 var app = Adw.Application.New("de.shortdev.nearshare", Gio.ApplicationFlags.FlagsNone);
+app.Version = Assembly.GetExecutingAssembly().GetName().Version?.ToString();
 app.OnActivate += (app, args) =>
 {
     StyleManager.GetDefault().ColorScheme = ColorScheme.PreferDark;

@@ -5,6 +5,7 @@
 		<TargetFramework>net9.0</TargetFramework>
 		<RuntimeIdentifiers>linux-x64</RuntimeIdentifiers>
 		<RootNamespace>NearShare</RootNamespace>
+		<AssemblyName>NearShare</AssemblyName>
 		<Version>0.1.0-alpha</Version>
 	</PropertyGroup>
 

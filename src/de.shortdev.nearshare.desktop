@@ -1,0 +1,21 @@
+[Desktop Entry]
+Type=Application
+Name=Nearby Sharing
+Comment=Share files and urls with nearby devices
+Exec=/home/shortdev/projects/nearshare/linux/src/bin/Debug/net9.0/NearShare
+Terminal=false
+Categories=Utility
+SingleMainWindow=true
+Actions=share-file;share-url;receive
+
+[Desktop Action share-file]
+Name=Share file
+Exec=/home/shortdev/projects/nearshare/linux/src/bin/Debug/net9.0/NearShare share files %F --show-ui
+
+[Desktop Action share-url]
+Name=Share url
+Exec=/home/shortdev/projects/nearshare/linux/src/bin/Debug/net9.0/NearShare share url %u --show-ui
+
+[Desktop Action receive]
+Name=Receive
+Exec=/home/shortdev/projects/nearshare/linux/src/bin/Debug/net9.0/NearShare receive --show-ui
