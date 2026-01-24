@@ -23,7 +23,7 @@
                                     <object class="GtkImage">
                                         <property name="visible">true</property>
                                         <binding name="icon-name">
-                                            <lookup name="TransportTypeItemName" type="NearShareGtkUtilsDeviceWrapper">
+                                            <lookup name="TransportTypeIconName" type="NearShareGtkUtilsDeviceWrapper">
                                                 <lookup name="item">GtkListItem</lookup>
                                             </lookup>
                                         </binding>

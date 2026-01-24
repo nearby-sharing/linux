@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using GObject;
@@ -28,16 +29,36 @@ public partial class DeviceWrapper(global::GObject.Internal.ObjectHandle handle)
         NativeProperty.InstallProperties(
             new ObjectClassUnownedHandle(classHandle),
             0,
-            NativeProperty.String("DeviceName", ParamFlags.Readwrite),
-            NativeProperty.String("DeviceTypeIconName", ParamFlags.Readwrite),
-            NativeProperty.String("TransportTypeIconName", ParamFlags.Readwrite)
+            NativeProperty.String(nameof(DeviceName), ParamFlags.Readable),
+            NativeProperty.String(nameof(DeviceTypeIconName), ParamFlags.Readable),
+            NativeProperty.String(nameof(TransportTypeIconName), ParamFlags.Readable)
         );
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
     static void GetPropertyValue(nint @this, uint propertyId, nint value, nint paramSpec)
     {
+        DeviceWrapper instance = (DeviceWrapper)InstanceWrapper.WrapHandle<DeviceWrapper>(@this, ownedRef:false);
+        
         GObject.Value value2 = new(new ValueOwnedHandle(value));
+        switch (propertyId)
+        {
+            case 1:
+                value2.SetString(instance.DeviceName);
+                break;
+            
+            case 2:
+                value2.SetString(instance.DeviceTypeIconName);
+                break;
+            
+            case 3:
+                value2.SetString(instance.TransportTypeIconName);
+                break;
+            
+            default:
+                Debug.Fail($"Unknown property id {propertyId}");
+                break;
+        }
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]

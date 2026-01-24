@@ -14,7 +14,7 @@ public static class NativeProperty
             NullableUtf8StringOwnedHandle.Create(name),
             NullableUtf8StringOwnedHandle.Create(name),
             NullableUtf8StringOwnedHandle.Create(defaultValue),
-            ParamFlags.Readable
+            flags
         );
     }
 
