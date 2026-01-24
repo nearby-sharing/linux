@@ -3,6 +3,7 @@ using NearShare.GtkUtils;
 using ShortDev.Microsoft.ConnectedDevices;
 using ShortDev.Microsoft.ConnectedDevices.NearShare;
 using ShortDev.Microsoft.ConnectedDevices.Transports;
+using Dialog = Adw.Dialog;
 
 namespace NearShare;
 
@@ -22,6 +23,7 @@ sealed class ShareDialog : IDisposable
 
         var builder = Utils.LoadUI<ShareDialog>();
         _dialog = builder.GetObject<Adw.Dialog>("dialog")!;
+        _dialog.OnClosed += OnClose;
 
         _stack = builder.GetObject<Adw.ViewStack>("stack")!;
         _deviceList = SetupDeviceSelection(builder.GetObject<GridView>("deviceList")!);
@@ -49,6 +51,7 @@ sealed class ShareDialog : IDisposable
 
     readonly TaskCompletionSource _promise = new();
     readonly CancellationTokenSource _discoverCancellation = new();
+    readonly CancellationTokenSource _transferCancellation = new();
 
     readonly HashSet<CdpDevice> _foundDevices = [];
 
@@ -73,20 +76,20 @@ sealed class ShareDialog : IDisposable
         if (_deviceList.GetObject(args.Position) is not DeviceWrapper item)
             return;
 
-        _discoverCancellation.Cancel();
-
-        _stack.VisibleChild = _stack.VisibleChild?.GetNextSibling();
-
         bool isWaitingForAcceptance = true;
-        Progress<NearShareProgress> progress = new();
-        progress.ProgressChanged += OnProgress;
-
-        NearShareSender sender = new(_cdp);
         try
         {
-            await _transfer.Execute(sender, item.Device!, progress, cancellation: default);
+            await _discoverCancellation.CancelAsync();
+
+            _stack.VisibleChild = _stack.VisibleChild?.GetNextSibling();
+
+            Progress<NearShareProgress> progress = new();
+            progress.ProgressChanged += OnProgress;
+
+            NearShareSender sender = new(_cdp);
+            await _transfer.Execute(sender, item.Device!, progress, _transferCancellation.Token);
             _promise.TrySetResult();
-            
+
             _stack.VisibleChild = _stack.VisibleChild?.GetNextSibling();
         }
         catch (Exception ex)
@@ -106,8 +109,17 @@ sealed class ShareDialog : IDisposable
         }
     }
 
+    private void OnClose(Dialog sender, EventArgs args)
+    {
+        _promise.TrySetCanceled();
+    }
+
     public void Dispose()
     {
+        _discoverCancellation.Cancel();
         _discoverCancellation.Dispose();
+
+        _transferCancellation.Cancel();
+        _transferCancellation.Dispose();
     }
 }

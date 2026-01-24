@@ -153,6 +153,24 @@ sealed class MainWindow
         using var cdp = await CdpUtils.Create(Environment.MachineName, _loggerFactory);
         using ShareDialog dialog = new(transfer, cdp);
         dialog.Present(_window);
-        await dialog.ExecuteAsync();
+        try
+        {
+            await dialog.ExecuteAsync();
+        }
+        catch (OperationCanceledException)
+        {
+        }
+        catch (Exception ex)
+        {
+            Adw.AlertDialog errorDialog = new()
+            {
+                Heading = ex.GetType().Name,
+                Body = ex.Message,
+                CloseResponse = "ok",
+                DefaultResponse = "ok"
+            };
+            errorDialog.AddResponse("ok", "Ok");
+            errorDialog.Present(_window);
+        }
     }
 }
