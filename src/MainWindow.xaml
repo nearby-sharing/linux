@@ -4,8 +4,8 @@
 	<requires lib="libadwaita" version="1.0"/>
 	<object class="AdwWindow" id="window">
 		<property name="title">NearShare</property>
-		<property name="default-height">320</property>
 		<property name="default-width">512</property>
+		<property name="default-height">512</property>
 		<property name="receives-default">True</property>
 		<property name="content">
 			<object class="AdwToolbarView">
@@ -39,18 +39,6 @@
 							<object class="AdwViewStack" id="stack">
 								<property name="valign">fill</property>
 								<property name="vexpand">true</property>
-								<child>
-									<object class="AdwViewStackPage">
-										<property name="name">home</property>
-										<property name="title">Welcome</property>
-										<property name="icon-name">user-home-symbolic</property>
-										<property name="child">
-											<object class="AdwStatusPage">
-												<property name="title">Welcome!</property>
-											</object>
-										</property>
-									</object>
-								</child>
 								<child>
 									<object class="AdwViewStackPage">
 										<property name="name">send</property>
