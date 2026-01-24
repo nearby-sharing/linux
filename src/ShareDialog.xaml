@@ -34,11 +34,56 @@
                                     </object>
                                 </child>
                                 <child>
-                                    <object class="AdwViewStackPage">
+                                    <object class="AdwViewStackPage" id="spinnerPage">
                                         <property name="child">
-                                            <object class="AdwSpinner">
-                                                <property name="width-request">48</property>
-                                                <property name="height-request">48</property>
+                                            <object class="GtkBox">
+                                                <property name="orientation">vertical</property>
+                                                <property name="spacing">8</property>
+                                                <property name="valign">center</property>
+                                                <child>
+                                                    <object class="AdwSpinner">
+                                                        <property name="width-request">48</property>
+                                                        <property name="height-request">48</property>
+                                                    </object>
+                                                </child>
+                                                <child>
+                                                    <object class="GtkLabel">
+                                                        <property name="label">Waiting for acceptance</property>
+                                                    </object>
+                                                </child>
+                                            </object>
+                                        </property>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="AdwViewStackPage" id="progressPage">
+                                        <property name="child">
+                                            <object class="GtkProgressBar" id="progressBar">
+                                                <property name="valign">center</property>
+                                                <property name="show-text">true</property>
+                                                <property name="text">Transfer in progress</property>
+                                            </object>
+                                        </property>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="AdwViewStackPage" id="donePage">
+                                        <property name="child">
+                                            <object class="GtkBox">
+                                                <property name="orientation">vertical</property>
+                                                <property name="spacing">8</property>
+                                                <property name="valign">center</property>
+                                                <child>
+                                                    <object class="GtkImage">
+                                                        <property name="icon-name">checkbox-checked</property>
+                                                        <property name="pixel-size">50</property>
+                                                    </object>
+                                                </child>
+                                                <child>
+                                                    <object class="GtkLabel">
+                                                        <property name="label">Done</property>
+                                                    </object>
+                                                </child>
                                             </object>
                                         </property>
                                     </object>

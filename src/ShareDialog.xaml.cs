@@ -12,7 +12,9 @@ sealed class ShareDialog : IDisposable
     readonly Adw.Dialog _dialog;
     readonly Adw.ViewStack _stack;
     readonly Gio.ListStore _deviceList;
+    readonly Gtk.ProgressBar _progressBar;
     readonly ConnectedDevicesPlatform _cdp;
+
     public ShareDialog(ITransfer transfer, ConnectedDevicesPlatform cdp)
     {
         _transfer = transfer;
@@ -23,6 +25,8 @@ sealed class ShareDialog : IDisposable
 
         _stack = builder.GetObject<Adw.ViewStack>("stack")!;
         _deviceList = SetupDeviceSelection(builder.GetObject<GridView>("deviceList")!);
+
+        _progressBar = builder.GetObject<Gtk.ProgressBar>("progressBar")!;
     }
 
     Gio.ListStore SetupDeviceSelection(GridView gridView)
@@ -47,6 +51,7 @@ sealed class ShareDialog : IDisposable
     readonly CancellationTokenSource _discoverCancellation = new();
 
     readonly HashSet<CdpDevice> _foundDevices = [];
+
     public async Task ExecuteAsync()
     {
         _foundDevices.Clear();
@@ -72,17 +77,32 @@ sealed class ShareDialog : IDisposable
 
         _stack.VisibleChild = _stack.VisibleChild?.GetNextSibling();
 
+        bool isWaitingForAcceptance = true;
         Progress<NearShareProgress> progress = new();
+        progress.ProgressChanged += OnProgress;
 
         NearShareSender sender = new(_cdp);
         try
         {
             await _transfer.Execute(sender, item.Device!, progress, cancellation: default);
             _promise.TrySetResult();
+            
+            _stack.VisibleChild = _stack.VisibleChild?.GetNextSibling();
         }
         catch (Exception ex)
         {
             _promise.TrySetException(ex);
+        }
+
+        void OnProgress(object? sender, NearShareProgress progress)
+        {
+            if (isWaitingForAcceptance)
+            {
+                _stack.VisibleChild = _stack.VisibleChild?.GetNextSibling();
+                isWaitingForAcceptance = false;
+            }
+
+            _progressBar.Fraction = (double)progress.TransferedBytes / progress.TotalBytes;
         }
     }
 
