@@ -117,6 +117,54 @@ sealed class MainWindow
                 dialog.Present(_window);
             };
         }
+
+        // Download
+        {
+            var downloadAction = builder.GetObject<ActionRow>("downloadAction")!;
+            downloadAction.OnActivated += async (sender, args) =>
+            {
+                try
+                {
+                    await UriLauncher.New("https://nearshare.shortdev.de/download/").LaunchAsync(_window);
+                }
+                catch (Exception e)
+                {
+                    Console.Error.WriteLine(e);
+                }
+            };
+        }
+
+        // Open Faq
+        {
+            var openFaqAction = builder.GetObject<ActionRow>("openFaqAction")!;
+            openFaqAction.OnActivated += async (sender, args) =>
+            {
+                try
+                {
+                    await UriLauncher.New("https://nearshare.shortdev.de/faq/").LaunchAsync(_window);
+                }
+                catch (Exception e)
+                {
+                    Console.Error.WriteLine(e);
+                }
+            };
+        }
+
+        // Setup Windows
+        {
+            var setupWindowsAction = builder.GetObject<ActionRow>("setupWindowsAction")!;
+            setupWindowsAction.OnActivated += async (sender, args) =>
+            {
+                try
+                {
+                    await UriLauncher.New("https://nearshare.shortdev.de/setup/").LaunchAsync(_window);
+                }
+                catch (Exception e)
+                {
+                    Console.Error.WriteLine(e);
+                }
+            };
+        }
     }
 
     bool DropTarget_OnDrop(DropTarget sender, DropTarget.DropSignalArgs args)
