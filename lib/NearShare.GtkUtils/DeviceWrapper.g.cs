@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using GLib.Internal;
 using GObject;
 using GObject.Internal;
 using Value = GObject.Value;
@@ -40,19 +41,19 @@ public partial class DeviceWrapper(global::GObject.Internal.ObjectHandle handle)
     {
         DeviceWrapper instance = (DeviceWrapper)InstanceWrapper.WrapHandle<DeviceWrapper>(@this, ownedRef:false);
         
-        GObject.Value value2 = new(new ValueOwnedHandle(value));
+        ValueUnownedHandle valueHandle = new(value);
         switch (propertyId)
         {
             case 1:
-                value2.SetString(instance.DeviceName);
+                GObject.Internal.Value.SetString(valueHandle, NullableUtf8StringOwnedHandle.Create(instance.DeviceName));
                 break;
             
             case 2:
-                value2.SetString(instance.DeviceTypeIconName);
+                GObject.Internal.Value.SetString(valueHandle, NullableUtf8StringOwnedHandle.Create(instance.DeviceTypeIconName));
                 break;
             
             case 3:
-                value2.SetString(instance.TransportTypeIconName);
+                GObject.Internal.Value.SetString(valueHandle, NullableUtf8StringOwnedHandle.Create(instance.TransportTypeIconName));
                 break;
             
             default:
