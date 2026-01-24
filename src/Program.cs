@@ -23,4 +23,4 @@ app.OnActivate += (app, args) =>
 
 SynchronizationContext.SetSynchronizationContext(new GtkSynchronizationContext());
 
-return app.Run(args.Length, args);
+return app.Run(args);

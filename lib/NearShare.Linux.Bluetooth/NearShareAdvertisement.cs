@@ -1,5 +1,4 @@
 ﻿using ShortDev.Microsoft.ConnectedDevices.Transports.Bluetooth;
-using System.Runtime.CompilerServices;
 using System.Runtime.Versioning;
 using Tmds.DBus.Protocol;
 
@@ -18,29 +17,14 @@ internal sealed class NearShareAdvertisement : ILEAdvertisement1
 
     public static NearShareAdvertisement Create(AdvertiseOptions options)
     {
-        WriteableBuffer beaconData = new(options.BeaconData.ToArray());
         return new()
         {
             LocalName = options.BeaconData.DeviceName,
             Type = "peripheral",
             ManufacturerData = new()
             {
-                { (ushort)options.ManufacturerId, beaconData.AsVariant() }
+                { (ushort)options.ManufacturerId, VariantValue.Array(options.BeaconData.ToArray()) }
             }
         };
-    }
-
-    readonly struct WriteableBuffer(ReadOnlyMemory<byte> buffer) : IDBusWritable
-    {
-        readonly ReadOnlyMemory<byte> _buffer = buffer;
-
-        public void WriteTo(ref MessageWriter writer)
-            => writer.WriteArray(_buffer.Span);
-
-        public Variant AsVariant()
-            => CreateVariant("ay"u8, this);
-
-        [UnsafeAccessor(UnsafeAccessorKind.Constructor)]
-        extern static Variant CreateVariant(ReadOnlySpan<byte> signature, IDBusWritable value);
     }
 }
