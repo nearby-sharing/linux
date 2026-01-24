@@ -55,7 +55,7 @@
 									<object class="AdwViewStackPage">
 										<property name="name">send</property>
 										<property name="title">Send</property>
-										<property name="icon-name">go-up-symbolic</property>
+										<property name="icon-name">send-to-symbolic</property>
 										<property name="child">
 											<object class="AdwClamp" id="sendPage">
 												<child>
