@@ -14,6 +14,7 @@ public sealed class LinuxBluetoothHandler : IBluetoothHandler
 {
     readonly BlueZManager _manager;
     readonly IAdapter1 _adapter;
+
     private LinuxBluetoothHandler(BlueZManager manager, IAdapter1 adapter, PhysicalAddress macAddress)
     {
         _manager = manager;
@@ -72,7 +73,7 @@ public sealed class LinuxBluetoothHandler : IBluetoothHandler
         await _adapter.SetDiscoveryFilterAsync(new()
         {
             { "Transport", "le" },
-            { "DuplicateData", false }
+            { "DuplicateData", true }
         });
 
         using var watcher = await _manager.ObjectManager.WatchInterfacesAddedAsync((ex, changes) =>
@@ -85,6 +86,18 @@ public sealed class LinuxBluetoothHandler : IBluetoothHandler
 
             ParseDevice(manufacturerData.GetDictionary<ushort, VariantValue>());
         });
+
+        await foreach (var device in _manager.GetDevicesAsync().WithCancellation(cancellationToken))
+        {
+            try
+            {
+                var manufacturerData = await device.GetManufacturerDataPropertyAsync();
+                ParseDevice(manufacturerData);
+            }
+            catch
+            {
+            }
+        }
 
         await _adapter.StartDiscoveryAsync();
         await cancellationToken.AwaitCancellation();
@@ -109,7 +122,8 @@ public sealed class LinuxBluetoothHandler : IBluetoothHandler
         }
     }
 
-    public async Task<CdpSocket> ConnectRfcommAsync(EndpointInfo endpoint, RfcommOptions options, CancellationToken cancellationToken = default)
+    public async Task<CdpSocket> ConnectRfcommAsync(EndpointInfo endpoint, RfcommOptions options,
+        CancellationToken cancellationToken = default)
     {
         Guid serviceId = Guid.Parse(options.ServiceId!);
 
