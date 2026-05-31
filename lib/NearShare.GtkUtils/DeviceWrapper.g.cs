@@ -8,19 +8,11 @@ using Value = GObject.Value;
 
 namespace NearShare.GtkUtils;
 
-public partial class DeviceWrapper(global::GObject.Internal.ObjectHandle handle) : global::GObject.Object(handle), GObject.GTypeProvider, GObject.InstanceFactory
+partial class DeviceWrapper
 {
-    private static readonly unsafe GObject.Type GType = SubclassRegistrarEx.Register<DeviceWrapper, global::GObject.Object>(&ClassInitializeShim);
-    public static new GObject.Type GetGType() => GType;
-
-    static object GObject.InstanceFactory.Create(System.IntPtr handle, bool ownsHandle)
-    {
-        return new DeviceWrapper(new global::GObject.Internal.ObjectHandle(handle, ownsHandle));
-    }
-     
-    public DeviceWrapper(params GObject.ConstructArgument[] constructArguments) : this(global::GObject.Internal.ObjectHandle.For<DeviceWrapper>(constructArguments)) { }
-
-    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
+    static partial void CompositeTemplateClassInit(IntPtr classHandle, IntPtr classData)
+        => ClassInitializeShim(classHandle, classData);
+    
     private static unsafe void ClassInitializeShim(nint classHandle, nint classData)
     {
         var pClass = (ObjectClassDataRaw*)classHandle;

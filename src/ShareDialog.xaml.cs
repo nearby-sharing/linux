@@ -67,7 +67,7 @@ sealed class ShareDialog : IDisposable
         void OnDeviceDiscovered(ICdpTransport sender, CdpDevice device)
         {
             if (_foundDevices.Add(device))
-                _deviceList.Append(new DeviceWrapper(device));
+                _deviceList.Append(DeviceWrapper.Create(device));
         }
     }
 

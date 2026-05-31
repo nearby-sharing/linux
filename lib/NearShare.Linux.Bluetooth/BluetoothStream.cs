@@ -6,12 +6,12 @@ using System.Runtime.Versioning;
 namespace NearShare.Linux.Bluetooth;
 
 [SupportedOSPlatform("linux")]
-internal sealed partial class BluetoothStream(SafeFileHandle handle) : Stream
+internal sealed partial class BluetoothStream(SafeHandle handle) : Stream
 {
-    readonly SafeFileHandle _handle = handle;
+    readonly SafeHandle _handle = handle;
 
     [LibraryImport("libc", EntryPoint = "read", SetLastError = true)]
-    private static partial int Receive(SafeFileHandle handle, ref byte buffer, int length);
+    private static partial int Receive(SafeHandle handle, ref byte buffer, int length);
 
     public override bool CanRead { get; } = true;
     public override int Read(byte[] buffer, int offset, int count)
@@ -27,7 +27,7 @@ internal sealed partial class BluetoothStream(SafeFileHandle handle) : Stream
     }
 
     [LibraryImport("libc", EntryPoint = "send", SetLastError = true)]
-    private static partial int Send(SafeFileHandle handle, ref byte buffer, nuint length, int flags = 0);
+    private static partial int Send(SafeHandle handle, ref byte buffer, nuint length, int flags = 0);
 
     public override bool CanWrite { get; } = true;
     public override void Write(byte[] buffer, int offset, int count)

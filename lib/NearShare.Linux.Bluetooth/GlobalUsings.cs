@@ -1,6 +1,6 @@
-﻿global using IAdapter1 = Tmds.DBus.SourceGenerator.OrgBluezAdapter1Proxy;
-global using IObjectManager = Tmds.DBus.SourceGenerator.OrgFreedesktopDBusObjectManagerProxy;
-global using IDevice1 = Tmds.DBus.SourceGenerator.OrgBluezDevice1Proxy;
-global using IProfileManager1 = Tmds.DBus.SourceGenerator.OrgBluezProfileManager1Proxy;
-global using ILEAdvertisingManager1 = Tmds.DBus.SourceGenerator.OrgBluezLEAdvertisingManager1Proxy;
-global using ILEAdvertisement1 = Tmds.DBus.SourceGenerator.OrgBluezLEAdvertisement1Handler;
+﻿global using IAdapter1 = NearShare.Linux.Bluetooth.DBus.Adapter1;
+global using IObjectManager = NearShare.Linux.Bluetooth.DBus.ObjectManager;
+global using IDevice1 = NearShare.Linux.Bluetooth.DBus.Device1;
+global using IProfileManager1 = NearShare.Linux.Bluetooth.DBus.ProfileManager1;
+global using ILEAdvertisingManager1 = NearShare.Linux.Bluetooth.DBus.LEAdvertisingManager1;
+global using ILEAdvertisement1 = NearShare.Linux.Bluetooth.DBus.ILEAdvertisement1Handler;

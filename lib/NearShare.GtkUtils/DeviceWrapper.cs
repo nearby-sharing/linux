@@ -1,15 +1,19 @@
-﻿using ShortDev.Microsoft.ConnectedDevices;
+﻿using GObject;
+using ShortDev.Microsoft.ConnectedDevices;
 using ShortDev.Microsoft.ConnectedDevices.Transports;
 
 namespace NearShare.GtkUtils;
 
+[Subclass<GObject.Object>]
 public sealed partial class DeviceWrapper
 {
-    public CdpDevice? Device { get; }
+    public CdpDevice? Device { get; private set; }
 
-    public DeviceWrapper(CdpDevice device) : this()
+    public static DeviceWrapper Create(CdpDevice device)
     {
-        Device = device;
+        var result = DeviceWrapper.NewWithProperties([]);
+        result.Device = device;
+        return result;
     }
 
     public string DeviceName => Device?.Name ?? string.Empty;

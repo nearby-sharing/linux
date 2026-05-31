@@ -30,7 +30,7 @@ public sealed class LinuxBluetoothHandler : IBluetoothHandler
         var adapters = await manager.GetAdaptersAsync();
         var adapter = adapters.FirstOrDefault() ?? throw new InvalidOperationException("Could not get adapter");
 
-        var addressStr = await adapter.GetAddressPropertyAsync();
+        var addressStr = await adapter.GetAddressAsync();
         var macAddress = PhysicalAddress.Parse(addressStr);
 
         return new(manager, adapter, macAddress);
@@ -40,13 +40,12 @@ public sealed class LinuxBluetoothHandler : IBluetoothHandler
     {
         try
         {
-            await _adapter.SetPoweredPropertyAsync(true);
-            await _adapter.SetDiscoverablePropertyAsync(true);
+            await _adapter.SetPoweredAsync(true);
+            await _adapter.SetDiscoverableAsync(true);
 
-            var advertisement = NearShareAdvertisement.Create(options);
-            await _manager.AdvertiseAsync(advertisement.Path, advertisement, cancellationToken);
+            await _manager.AdvertiseAsync(options, cancellationToken);
 
-            await _adapter.SetDiscoverablePropertyAsync(false);
+            await _adapter.SetDiscoverableAsync(false);
         }
         catch (Exception ex)
         {
@@ -69,16 +68,17 @@ public sealed class LinuxBluetoothHandler : IBluetoothHandler
 
     async Task ScanInternal(ScanOptions scanOptions, CancellationToken cancellationToken = default)
     {
-        await _adapter.SetPoweredPropertyAsync(true);
+        await _adapter.SetPoweredAsync(true);
         await _adapter.SetDiscoveryFilterAsync(new()
         {
             { "Transport", "le" },
             { "DuplicateData", true }
         });
 
-        using var watcher = await _manager.ObjectManager.WatchInterfacesAddedAsync((ex, changes) =>
+        using var watcher = await _manager.ObjectManager.WatchInterfacesAddedAsync(ev =>
         {
-            if (!changes.InterfacesAndProperties.TryGetValue("org.bluez.Device1", out var props))
+            var (_, changes) = ev;
+            if (!changes.TryGetValue("org.bluez.Device1", out var props))
                 return;
 
             if (!props.TryGetValue("ManufacturerData", out var manufacturerData))
@@ -91,7 +91,7 @@ public sealed class LinuxBluetoothHandler : IBluetoothHandler
         {
             try
             {
-                var manufacturerData = await device.GetManufacturerDataPropertyAsync();
+                var manufacturerData = await device.GetManufacturerDataAsync();
                 ParseDevice(manufacturerData);
             }
             catch

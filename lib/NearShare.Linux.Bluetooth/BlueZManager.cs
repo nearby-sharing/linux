@@ -1,15 +1,17 @@
-﻿using ShortDev.Microsoft.ConnectedDevices;
-using Spectre.Console;
+﻿extern alias DbusHighLevel;
+using ShortDev.Microsoft.ConnectedDevices;
 using System.Runtime.Versioning;
+using DbusHighLevel::Tmds.DBus;
+using ShortDev.Microsoft.ConnectedDevices.Transports.Bluetooth;
 using Tmds.DBus.Protocol;
-using Tmds.DBus.SourceGenerator;
+using ObjectPath = Tmds.DBus.Protocol.ObjectPath;
 
 namespace NearShare.Linux.Bluetooth;
 
 [SupportedOSPlatform("linux")]
-internal sealed class BlueZManager(Connection connection)
+internal sealed class BlueZManager(DBusConnection connection)
 {
-    public Connection Connection { get; } = connection;
+    public DBusConnection Connection { get; } = connection;
     public ILEAdvertisingManager1 AdvertisingManager { get; } = new(connection, "org.bluez", "/org/bluez/hci0");
     public IObjectManager ObjectManager { get; } = new(connection, "org.bluez", "/");
     public IProfileManager1 ProfileManager { get; } = new(connection, "org.bluez", "/org/bluez");
@@ -43,44 +45,38 @@ internal sealed class BlueZManager(Connection connection)
                 continue;
 
             IDevice1 device = new(Connection, "org.bluez", path);
-            if (await device.GetAddressPropertyAsync() == address)
+            if (await device.GetAddressAsync() == address)
                 return device;
         }
 
         throw new FileNotFoundException($"Could not find device with address {address}");
     }
 
-    public async ValueTask AdvertiseAsync(ObjectPath path, ILEAdvertisement1 advertisement, CancellationToken cancellationToken)
+    public async ValueTask AdvertiseAsync(AdvertiseOptions options, CancellationToken cancellationToken)
     {
-        PathHandler handler = new(path);
-        handler.Add(advertisement);
-
-        Connection.AddMethodHandler(handler);
+        NearShareAdvertisement advertisement = NearShareAdvertisement.Create(Connection, options);
+        Connection.AddMethodHandler(advertisement);
         try
         {
-            await AdvertisingManager.RegisterAdvertisementAsync(path, []);
+            await AdvertisingManager.RegisterAdvertisementAsync(advertisement.Path, []);
 
             await cancellationToken.AwaitCancellation();
 
-            await AdvertisingManager.UnregisterAdvertisementAsync(path);
+            await AdvertisingManager.UnregisterAdvertisementAsync(advertisement.Path);
         }
         finally
         {
-            Connection.RemoveMethodHandler(path);
+            Connection.RemoveMethodHandler(advertisement.Path);
         }
     }
 
     public async ValueTask<Stream> CreateRfcommSocketAsync(IDevice1 device, string serviceId)
     {
-        RfcommProfile profile = new(serviceId);
-
-        PathHandler handler = new("/de/shortdev/nearshare/profile0");
-        handler.Add(profile);
-
-        Connection.AddMethodHandler(handler);
+        RfcommProfile profile = new(Connection, serviceId, "/de/shortdev/nearshare/profile0");
+        Connection.AddMethodHandler(profile);
         try
         {
-            await ProfileManager.RegisterProfileAsync(handler.Path, serviceId, []);
+            await ProfileManager.RegisterProfileAsync(profile.Path, serviceId, []);
             try
             {
                 await device.ConnectProfileAsync(serviceId);
@@ -88,18 +84,18 @@ internal sealed class BlueZManager(Connection connection)
             }
             finally
             {
-                await ProfileManager.UnregisterProfileAsync(handler.Path);
+                await ProfileManager.UnregisterProfileAsync(profile.Path);
             }
         }
         finally
         {
-            Connection.RemoveMethodHandler(handler.Path);
+            Connection.RemoveMethodHandler(profile.Path);
         }
     }
 
     public static async ValueTask<BlueZManager> CreateAsync()
     {
-        Connection connection = new(Address.System!);
+        DBusConnection connection = new(Address.System!);
         await connection.ConnectAsync();
         return new(connection);
     }
