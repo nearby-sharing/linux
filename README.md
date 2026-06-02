@@ -13,7 +13,7 @@ This is a small gtk 4 (+ libadwaita) gui allowing you to send and receive files 
   ```sh
   git clone --recurse-submodules git@github.com:nearby-sharing/linux.git
   ```
-- Install [.NET 9 SDK](https://dot.net)
+- Install [.NET 10 SDK](https://dot.net)
 - `dotnet run src`
 
 ## License
