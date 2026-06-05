@@ -13,8 +13,6 @@
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 		<PackageReference Include="Tmds.DBus.Protocol" Version="0.94.1" />
-		<PackageReference Include="InTheHand.Net.Bluetooth" Version="4.2.4" />
-		<PackageReference Include="Tmds.DBus" Version="0.94.1" Aliases="DbusHighLevel" />
 	</ItemGroup>
 
 	<ItemGroup>

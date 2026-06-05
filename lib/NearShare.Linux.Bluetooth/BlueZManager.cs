@@ -1,10 +1,7 @@
-﻿extern alias DbusHighLevel;
-using ShortDev.Microsoft.ConnectedDevices;
+﻿using ShortDev.Microsoft.ConnectedDevices;
 using System.Runtime.Versioning;
-using DbusHighLevel::Tmds.DBus;
 using ShortDev.Microsoft.ConnectedDevices.Transports.Bluetooth;
 using Tmds.DBus.Protocol;
-using ObjectPath = Tmds.DBus.Protocol.ObjectPath;
 
 namespace NearShare.Linux.Bluetooth;
 
@@ -95,7 +92,7 @@ internal sealed class BlueZManager(DBusConnection connection)
 
     public static async ValueTask<BlueZManager> CreateAsync()
     {
-        DBusConnection connection = new(Address.System!);
+        DBusConnection connection = new(DBusAddress.System!);
         await connection.ConnectAsync();
         return new(connection);
     }
