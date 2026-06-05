@@ -1,8 +1,8 @@
 ﻿using Gtk;
-using NearShare.GtkUtils;
 using ShortDev.Microsoft.ConnectedDevices;
 using ShortDev.Microsoft.ConnectedDevices.NearShare;
 using ShortDev.Microsoft.ConnectedDevices.Transports;
+using DeviceWrapper = NearShare.ViewModels.DeviceWrapper;
 using Dialog = Adw.Dialog;
 
 namespace NearShare;

@@ -2,7 +2,7 @@
 using ShortDev.Microsoft.ConnectedDevices;
 using ShortDev.Microsoft.ConnectedDevices.Transports;
 
-namespace NearShare.GtkUtils;
+namespace NearShare.ViewModels;
 
 [Subclass<GObject.Object>]
 public sealed partial class DeviceWrapper
@@ -11,7 +11,7 @@ public sealed partial class DeviceWrapper
 
     public static DeviceWrapper Create(CdpDevice device)
     {
-        var result = DeviceWrapper.NewWithProperties([]);
+        var result = NewWithProperties([]);
         result.Device = device;
         return result;
     }

@@ -5,7 +5,6 @@
   <Folder Name="/lib/">
     <Project Path="lib/android/lib/ShortDev.Microsoft.ConnectedDevices.NearShare/ShortDev.Microsoft.ConnectedDevices.NearShare.csproj" />
     <Project Path="lib/android/lib/ShortDev.Microsoft.ConnectedDevices/ShortDev.Microsoft.ConnectedDevices.csproj" />
-    <Project Path="lib/NearShare.GtkUtils/NearShare.GtkUtils.csproj" />
     <Project Path="lib/NearShare.Linux.Bluetooth/NearShare.Linux.Bluetooth.csproj" />
   </Folder>
   <Project Path="src/NearShare.Linux.csproj" />

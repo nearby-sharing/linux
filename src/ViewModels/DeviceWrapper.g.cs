@@ -4,9 +4,10 @@ using System.Runtime.InteropServices;
 using GLib.Internal;
 using GObject;
 using GObject.Internal;
+using NearShare.Interop;
 using Value = GObject.Value;
 
-namespace NearShare.GtkUtils;
+namespace NearShare.ViewModels;
 
 partial class DeviceWrapper
 {
@@ -31,7 +32,7 @@ partial class DeviceWrapper
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
     static void GetPropertyValue(nint @this, uint propertyId, nint value, nint paramSpec)
     {
-        DeviceWrapper instance = (DeviceWrapper)InstanceWrapper.WrapHandle<DeviceWrapper>(@this, ownedRef:false);
+        ViewModels.DeviceWrapper instance = (ViewModels.DeviceWrapper)InstanceWrapper.WrapHandle<ViewModels.DeviceWrapper>(@this, ownedRef:false);
         
         ValueUnownedHandle valueHandle = new(value);
         switch (propertyId)

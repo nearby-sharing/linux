@@ -2,7 +2,7 @@ using GLib.Internal;
 using GObject;
 using GObject.Internal;
 
-namespace NearShare.GtkUtils;
+namespace NearShare.Interop;
 
 public static class NativeProperty
 {
