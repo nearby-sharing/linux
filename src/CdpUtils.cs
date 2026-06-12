@@ -5,10 +5,12 @@ using ShortDev.Microsoft.ConnectedDevices.Encryption;
 using ShortDev.Microsoft.ConnectedDevices.Transports.Bluetooth;
 using ShortDev.Microsoft.ConnectedDevices.Transports.Network;
 using System.Net;
+using NearShare.Linux.WiFiDirect;
+using ShortDev.Microsoft.ConnectedDevices.Transports.WiFiDirect;
 
 namespace NearShare;
 
-static class CdpUtils
+internal static class CdpUtils
 {
     public static async Task<ConnectedDevicesPlatform> Create(string deviceName, ILoggerFactory loggerFactory)
     {
@@ -24,10 +26,14 @@ static class CdpUtils
         ConnectedDevicesPlatform cdp = new(deviceInfo, loggerFactory);
 
         NetworkHandler networkHandler = new();
-        cdp.AddTransport<NetworkTransport>(new(networkHandler));
+        NetworkTransport networkTransport = new(networkHandler);
+        cdp.AddTransport<NetworkTransport>(networkTransport);
 
-        LinuxBluetoothHandler bluetoothHandler = await LinuxBluetoothHandler.CreateAsync();
+        var bluetoothHandler = await LinuxBluetoothHandler.CreateAsync();
         cdp.AddTransport<BluetoothTransport>(new(bluetoothHandler));
+
+        var wifiDirectHandler = await LinuxWiFiDirectHandler.CreateAsync();
+        cdp.AddTransport<WiFiDirectTransport>(new(wifiDirectHandler, networkTransport));
 
         return cdp;
     }

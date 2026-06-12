@@ -25,6 +25,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\lib\android\lib\ShortDev.Microsoft.ConnectedDevices.NearShare\ShortDev.Microsoft.ConnectedDevices.NearShare.csproj" />
 		<ProjectReference Include="..\lib\NearShare.Linux.Bluetooth\NearShare.Linux.Bluetooth.csproj" />
+		<ProjectReference Include="..\lib\NearShare.Linux.WiFiDirect\NearShare.Linux.WiFiDirect.csproj" />
 	</ItemGroup>
 
 </Project>
