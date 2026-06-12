@@ -9,7 +9,7 @@ public sealed class LinuxWiFiDirectHandler(WiFiDirectHelper helper) : IWiFiDirec
 {
     private readonly WiFiDirectHelper _helper = helper;
 
-    public PhysicalAddress MacAddress => _helper.MacAddress; // PhysicalAddress.Parse("8c:b8:4a:5d:47:50");
+    public PhysicalAddress MacAddress => _helper.MacAddress;
     public bool IsEnabled => true;
 
     public async Task<IPAddress> ConnectAsync(string address, GroupInfo groupInfo,

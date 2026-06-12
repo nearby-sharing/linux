@@ -23,10 +23,6 @@ public sealed class WiFiDirectHelper
     public async Task<IPAddress> Connect(PhysicalAddress macAddress, string ssid, ReadOnlyMemory<byte> psk,
         CancellationToken cancellationToken)
     {
-        Console.WriteLine(macAddress.ToStringFormatted());
-        Console.WriteLine(Convert.ToHexString(Encoding.ASCII.GetBytes(ssid)));
-        Console.WriteLine(Convert.ToHexString(psk.ToArray()));
-
         TaskCompletionSource<IPAddress> promise = new();
         using var groupObserver = await P2PDevice.WatchGroupStartedAsync((properties) =>
         {
@@ -54,13 +50,10 @@ public sealed class WiFiDirectHelper
             { "group", "GCMP CCMP" },
         });
 
-        Console.WriteLine(groupPath.ToString());
-
         try
         {
             await P2PDevice.GroupAddAsync(new()
             {
-                // { "peer", peer },
                 { "persistent", true },
                 { "persistent_group_object", groupPath },
             });
