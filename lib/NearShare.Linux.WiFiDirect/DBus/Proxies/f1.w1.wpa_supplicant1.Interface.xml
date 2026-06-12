@@ -227,7 +227,9 @@
         <property name="UpdateConfig" type="s" access="readwrite"/>
         <property name="Uuid" type="s" access="readwrite"/>
         <property name="AutoUuid" type="s" access="readwrite"/>
+        -->
         <property name="DeviceName" type="s" access="readwrite"/>
+        <!--
         <property name="Manufacturer" type="s" access="readwrite"/>
         <property name="ModelName" type="s" access="readwrite"/>
         <property name="ModelNumber" type="s" access="readwrite"/>

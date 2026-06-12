@@ -45,6 +45,6 @@ public sealed class LinuxWiFiDirectHandler(WiFiDirectHelper helper) : IWiFiDirec
     {
     }
 
-    public static async Task<LinuxWiFiDirectHandler> CreateAsync()
-        => new(await WiFiDirectHelper.CreateAsync());
+    public static async Task<LinuxWiFiDirectHandler> CreateAsync(string deviceName)
+        => new(await WiFiDirectHelper.CreateAsync(deviceName));
 }

@@ -67,7 +67,7 @@ public sealed class WiFiDirectHelper
         return await promise.Task;
     }
 
-    public static async Task<WiFiDirectHelper> CreateAsync()
+    public static async Task<WiFiDirectHelper> CreateAsync(string deviceName)
     {
         DBusConnection connection = new(DBusAddress.System!);
         await connection.ConnectAsync();
@@ -83,8 +83,15 @@ public sealed class WiFiDirectHelper
             throw new InvalidOperationException("No interfaces found in wpa_supplicant");
 
         Interface inter = new(connection, "fi.w1.wpa_supplicant1", defaultInterfacePath);
-        var macAddress = await inter.GetMACAddressAsync();
-        Console.WriteLine(new PhysicalAddress(macAddress).ToStringFormatted());
+        try
+        {
+            await inter.SetDeviceNameAsync(deviceName);
+        }
+        catch (Exception e)
+        {
+            throw new InvalidOperationException(
+                "Failed to set 'device_name'. Windows will reject connections without a 'device_name'.", e);
+        }
 
         P2PDevice p2pDevice = new(connection, "fi.w1.wpa_supplicant1", defaultInterfacePath);
 
