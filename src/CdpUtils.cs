@@ -32,7 +32,7 @@ internal static class CdpUtils
         var bluetoothHandler = await LinuxBluetoothHandler.CreateAsync();
         cdp.AddTransport<BluetoothTransport>(new(bluetoothHandler));
 
-        var wifiDirectHandler = await LinuxWiFiDirectHandler.CreateAsync();
+        var wifiDirectHandler = await LinuxWiFiDirectHandler.CreateAsync(deviceName);
         cdp.AddTransport<WiFiDirectTransport>(new(wifiDirectHandler, networkTransport));
 
         return cdp;
