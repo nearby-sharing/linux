@@ -14,4 +14,8 @@
         <PackageReference Include="Tmds.DBus.Protocol" Version="0.94.1"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\android\lib\ShortDev.Microsoft.ConnectedDevices\ShortDev.Microsoft.ConnectedDevices.csproj" />
+    </ItemGroup>
+
 </Project>

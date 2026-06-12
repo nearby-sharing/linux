@@ -201,7 +201,9 @@
         <property name="BSSTMStatus" type="u" access="read"/>
         <property name="Stations" type="ao" access="read"/>
         <property name="MACAddressRandomizationMask" type="a{say}" access="readwrite"/>
+        -->
         <property name="MACAddress" type="ay" access="read"/>
+        <!--
         <property name="SignalChange" type="a{sv}" access="read"/>
         <property name="CtrlInterface" type="s" access="readwrite"/>
         <property name="CtrlInterfaceGroup" type="s" access="readwrite"/>
@@ -265,9 +267,11 @@
         <property name="IpAddrStart" type="s" access="readwrite"/>
         <property name="IpAddrEnd" type="s" access="readwrite"/>
         <property name="P2pCliProbe" type="s" access="readwrite"/>
+        -->
         <property name="P2pDeviceRandomMacAddr" type="s" access="readwrite"/>
         <property name="P2pDevicePersistentMacAddr" type="s" access="readwrite"/>
         <property name="P2pInterfaceRandomMacAddr" type="s" access="readwrite"/>
+        <!--
         <property name="P2p6ghzDisable" type="s" access="readwrite"/>
         <property name="BssMaxCount" type="s" access="readwrite"/>
         <property name="FilterSsids" type="s" access="readwrite"/>
