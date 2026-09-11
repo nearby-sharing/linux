@@ -6,6 +6,7 @@
     <Project Path="lib/android/lib/ShortDev.Microsoft.ConnectedDevices.NearShare/ShortDev.Microsoft.ConnectedDevices.NearShare.csproj" />
     <Project Path="lib/android/lib/ShortDev.Microsoft.ConnectedDevices/ShortDev.Microsoft.ConnectedDevices.csproj" />
     <Project Path="lib/NearShare.Linux.Bluetooth/NearShare.Linux.Bluetooth.csproj" />
+    <Project Path="lib/NearShare.Linux.WiFiDirect/NearShare.Linux.WiFiDirect.csproj" />
   </Folder>
   <Project Path="src/NearShare.Linux.csproj" />
 </Solution>
