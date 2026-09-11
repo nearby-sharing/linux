@@ -94,7 +94,21 @@ public sealed class WiFiDirectHelper
         }
 
         P2PDevice p2pDevice = new(connection, "fi.w1.wpa_supplicant1", defaultInterfacePath);
+        return new(supplicant, p2pDevice, await GetDeviceAddress(p2pDevice));
+    }
 
-        return new(supplicant, p2pDevice, PhysicalAddress.Parse("b8:9a:2a:25:79:b2"));
+    private static async Task<PhysicalAddress> GetDeviceAddress(P2PDevice device)
+    {
+        try
+        {
+            var result = await device.GetDeviceAddressAsync();
+            return new(result);
+        }
+        catch (Exception dbusEx)
+        {
+            return PhysicalAddress.Parse("b8:9a:2a:25:79:b2");
+            throw new InvalidOperationException(
+                "Could not get own 'p2p_device_address'. This is required to establish a connection.", dbusEx);
+        }
     }
 }

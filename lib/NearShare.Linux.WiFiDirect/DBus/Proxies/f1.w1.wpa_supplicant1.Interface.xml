@@ -525,6 +525,7 @@
             <arg name="properties" type="a{sv}"/>
         </signal>
         <property name="P2PDeviceConfig" type="a{sv}" access="readwrite"/>
+        <property name="DeviceAddress" type="ay" access="read"/>
         <property name="Peers" type="ao" access="read"/>
         <property name="Role" type="s" access="read"/>
         <property name="Group" type="o" access="read"/>
